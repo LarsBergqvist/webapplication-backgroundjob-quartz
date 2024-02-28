@@ -1,4 +1,4 @@
-﻿namespace WebApplication.Outbox;
+﻿namespace WebApplication.MessageBox;
 
 public sealed class MessageBoxOptions
 {

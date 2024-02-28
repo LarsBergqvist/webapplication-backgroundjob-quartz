@@ -1,15 +1,18 @@
 ﻿using Microsoft.Extensions.Options;
 using Quartz;
+using WebApplication.Abstractions;
 
-namespace WebApplication.Outbox;
+namespace WebApplication.MessageBox;
 
 internal sealed class ProcessMessagesBoxJobSetup : IConfigureOptions<QuartzOptions>
 {
+    private readonly IDateTimeProvider _dateTimeProvider;
     private readonly MessageBoxOptions _messageBoxOptions;
 
-    public ProcessMessagesBoxJobSetup(IOptions<MessageBoxOptions> outboxOptions)
+    public ProcessMessagesBoxJobSetup(IOptions<MessageBoxOptions> messageboxOptions, IDateTimeProvider dateTimeProvider)
     {
-        _messageBoxOptions = outboxOptions.Value;
+        _dateTimeProvider = dateTimeProvider;
+        _messageBoxOptions = messageboxOptions.Value;
     }
 
     public void Configure(QuartzOptions options)
@@ -22,6 +25,7 @@ internal sealed class ProcessMessagesBoxJobSetup : IConfigureOptions<QuartzOptio
                 configure
                     .ForJob(jobName)
                     .WithSimpleSchedule(schedule =>
-                        schedule.WithIntervalInSeconds(_messageBoxOptions.IntervalInSeconds).RepeatForever()));
+                        schedule.WithIntervalInSeconds(_messageBoxOptions.IntervalInSeconds).RepeatForever())
+                    .StartAt(_dateTimeProvider.UtcNow.AddSeconds(10)));
     }
 }

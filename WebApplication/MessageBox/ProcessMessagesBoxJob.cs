@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Quartz;
 using WebApplication.Abstractions;
 
-namespace WebApplication.Outbox;
+namespace WebApplication.MessageBox;
 
 [DisallowConcurrentExecution]
 internal sealed class ProcessMessagesBoxJob : IJob
@@ -19,12 +19,12 @@ internal sealed class ProcessMessagesBoxJob : IJob
 
     public ProcessMessagesBoxJob(
         IDateTimeProvider dateTimeProvider,
-        IOptions<MessageBoxOptions> outboxOptions,
+        IOptions<MessageBoxOptions> messageboxOptions,
         ILogger<ProcessMessagesBoxJob> logger)
     {
         _dateTimeProvider = dateTimeProvider;
         _logger = logger;
-        _messageBoxOptions = outboxOptions.Value;
+        _messageBoxOptions = messageboxOptions.Value;
     }
 
     public async Task Execute(IJobExecutionContext context)

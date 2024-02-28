@@ -1,6 +1,6 @@
 using Quartz;
 using WebApplication.Abstractions;
-using WebApplication.Outbox;
+using WebApplication.MessageBox;
 
 namespace WebApplication;
 
